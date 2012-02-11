@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<!--
+/*
+ * JavaScript Canvas to Blob Test 1.0
+ * https://github.com/blueimp/JavaScript-Canvas-to-Blob
+ *
+ * Copyright 2012, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>JavaScript Canvas to Blob Test</title>
+<link rel="stylesheet" href="http://blueimp.github.com/cdn/css/mocha.min.css">
+</head>
+<body>
+<div id="mocha"></div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://blueimp.github.com/cdn/js/mocha.min.js"></script>
+<script src="http://blueimp.github.com/cdn/js/expect.min.js"></script>
+<script>
+mocha.setup('bdd');
+$(function () {
+    mocha.run();
+});
+</script>
+<script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
+<script src="../canvas-to-blob.js"></script>
+<script src="test.js"></script>
+</body> 
+</html>
