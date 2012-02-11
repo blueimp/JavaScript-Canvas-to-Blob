@@ -1,5 +1,5 @@
 /*
- * JavaScript Canvas to Blob 1.0
+ * JavaScript Canvas to Blob 1.0.1
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
  *
  * Copyright 2012, Sebastian Tschan
@@ -12,7 +12,7 @@
  * http://stackoverflow.com/q/4998908
  */
 
-/*jslint nomen: true */
+/*jslint nomen: true, regexp: true */
 /*global window, atob, ArrayBuffer, Uint8Array, define */
 
 (function ($) {
@@ -20,6 +20,8 @@
 
     var BlobBuilder = window.MozBlobBuilder ||
             window.WebKitBlobBuilder || window.BlobBuilder,
+        blobTypes = /^image\/(jpeg|png)$/,
+
         // Converts a canvas element to a Blob or File object:
         canvasToBlob = function (canvas, callback, options) {
             options = options || {};
@@ -27,8 +29,10 @@
                 canvas.toBlob(callback, options.type);
                 return true;
             } else if (canvas.mozGetAsFile) {
+                var name = options.name;
                 callback(canvas.mozGetAsFile(
-                    options.name || 'blob.png',
+                    (blobTypes.test(options.type) && name) ||
+                        ((name && name.replace(/\..+$/, '')) || 'blob') + '.png',
                     options.type
                 ));
                 return true;
