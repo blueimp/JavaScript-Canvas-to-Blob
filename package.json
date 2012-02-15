@@ -32,8 +32,5 @@
             "url": "http://www.opensource.org/licenses/MIT"
         }
     ],
-    "files": [
-        "canvas-to-blob.js"
-    ],
     "main": "canvas-to-blob.js"
 }
