@@ -1,5 +1,5 @@
 /*
- * JavaScript Canvas to Blob Test 1.0
+ * JavaScript Canvas to Blob Test 2.0
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
  *
  * Copyright 2012, Sebastian Tschan
@@ -11,7 +11,7 @@
 
 /*global window, describe, it, expect, Blob */
 
-(function (expect, canvasToBlob) {
+(function (expect) {
     'use strict';
 
     // 80x60px GIF image (color black, base64 data):
@@ -19,75 +19,48 @@
             'OctNqLs968+w+G4kiW5omm6sq27gvH8kzX9o3n+s73/g8MCofE' +
             'ovGITCqXzKbzCY1Kp9Sq9YrNarfcrvcLDovH5PKsAAA7',
 	    imageUrl = 'data:image/gif;base64,' + b64Data,
-	    blob = canvasToBlob.dataURItoBlob(imageUrl);
+	    blob = window.dataURLtoBlob && window.dataURLtoBlob(imageUrl);
 
-    describe('canvasToBlob', function () {
-
-        it('Returns true when supporting canvas to blob conversions', function (done) {
-            window.loadImage(blob, function (canvas) {
-                expect(canvasToBlob(
-                    canvas,
-                    function () {
-                        done();
-                    }
-                )).to.be.ok();
-            }, {canvas: true});
-        });
-
-        it('Returns false when not supporting canvas to blob conversions', function () {
-            expect(canvasToBlob(
-                {},
-                function () {}
-            )).to.not.be.ok();
-        });
+    describe('canvas.toBlob', function () {
 
         it('Converts a canvas element to a blob and passes it to the callback function', function (done) {
             window.loadImage(blob, function (canvas) {
-                expect(canvasToBlob(
-                    canvas,
+                canvas.toBlob(
                     function (newBlob) {
                         done();
                         expect(newBlob).to.be.a(Blob);
-                    },
-                    blob
-                )).to.be.ok();
+                    }
+                );
             }, {canvas: true});
         });
 
         it('Converts a canvas element to a PNG blob', function (done) {
             window.loadImage(blob, function (canvas) {
-                expect(canvasToBlob(
-                    canvas,
+                canvas.toBlob(
                     function (newBlob) {
                         done();
                         expect(newBlob.type).to.be('image/png');
                     },
-                    {
-                        type: 'image/png'
-                    }
-                )).to.be.ok();
+                    'image/png'
+                );
             }, {canvas: true});
         });
 
         it('Converts a canvas element to a JPG blob', function (done) {
             window.loadImage(blob, function (canvas) {
-                expect(canvasToBlob(
-                    canvas,
+                canvas.toBlob(
                     function (newBlob) {
                         done();
                         expect(newBlob.type).to.be('image/jpeg');
                     },
-                    {
-                        type: 'image/jpeg'
-                    }
-                )).to.be.ok();
+                    'image/jpeg'
+                );
             }, {canvas: true});
         });
 
         it('Keeps the aspect ratio of the canvas image', function (done) {
             window.loadImage(blob, function (canvas) {
-                expect(canvasToBlob(
-                    canvas,
+                canvas.toBlob(
                     function (newBlob) {
                         window.loadImage(newBlob, function (img) {
                             done();
@@ -95,14 +68,13 @@
                             expect(img.height).to.be(canvas.height);
                         });
                     }
-                )).to.be.ok();
+                );
             }, {canvas: true});
         });
 
         it('Keeps the image data of the canvas image', function (done) {
             window.loadImage(blob, function (canvas) {
-                expect(canvasToBlob(
-                    canvas,
+                canvas.toBlob(
                     function (newBlob) {
                         window.loadImage(newBlob, function (newCanvas) {
                             var canvasData = canvas.getContext('2d')
@@ -114,13 +86,10 @@
                             expect(canvasData.height).to.be(newCanvasData.height);
                         }, {canvas: true});
                     }
-                )).to.be.ok();
+                );
             }, {canvas: true});
         });
 
     });
 
-}(
-    this.expect,
-    this.canvasToBlob
-));
+}(this.expect));
