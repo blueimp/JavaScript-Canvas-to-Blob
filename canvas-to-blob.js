@@ -20,7 +20,7 @@
     var CanvasPrototype = window.HTMLCanvasElement &&
             window.HTMLCanvasElement.prototype,
         BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder ||
-            window.MozBlobBuilder,
+            window.MozBlobBuilder || window.MSBlobBuilder,
         dataURLtoBlob = BlobBuilder && window.atob && window.ArrayBuffer &&
             window.Uint8Array && function (dataURI) {
                 var byteString,
