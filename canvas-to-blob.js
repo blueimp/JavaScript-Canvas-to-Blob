@@ -20,7 +20,7 @@
     var CanvasPrototype = window.HTMLCanvasElement &&
             window.HTMLCanvasElement.prototype,
         BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder ||
-            window.MozBlobBuilder || window.MSBlobBuilder,
+            window.MozBlobBuilder || window.MSBlobBuilder || window.Blob,
         dataURLtoBlob = BlobBuilder && window.atob && window.ArrayBuffer &&
             window.Uint8Array && function (dataURI) {
                 var byteString,
@@ -42,11 +42,17 @@
                 for (i = 0; i < byteString.length; i += 1) {
                     intArray[i] = byteString.charCodeAt(i);
                 }
+                // Separate out the mime component:
+                mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+                if(window.Blob && !BlobBuilder.prototype.append) {
+                    try {
+                         // Safari 6+
+                         return new Blob([arrayBuffer],{type:mimeString});
+                    } catch(e) {}
+                }
                 // Write the ArrayBuffer to a blob:
                 bb = new BlobBuilder();
                 bb.append(arrayBuffer);
-                // Separate out the mime component:
-                mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
                 return bb.getBlob(mimeString);
             };
     if (window.HTMLCanvasElement && !CanvasPrototype.toBlob) {
