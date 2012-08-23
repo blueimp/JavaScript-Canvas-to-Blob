@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/blueimp/JavaScript-Canvas-to-Blob.png)](http://travis-ci.org/blueimp/JavaScript-Canvas-to-Blob)
 # JavaScript Canvas to Blob
 
 ## Usage
