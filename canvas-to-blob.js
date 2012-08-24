@@ -1,5 +1,5 @@
 /*
- * JavaScript Canvas to Blob 2.0.2
+ * JavaScript Canvas to Blob 2.0.3
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
  *
  * Copyright 2012, Sebastian Tschan
@@ -19,13 +19,21 @@
     'use strict';
     var CanvasPrototype = window.HTMLCanvasElement &&
             window.HTMLCanvasElement.prototype,
-        hasBlobConstructor = function () {
+        hasBlobConstructor = window.Blob && (function () {
+            try {
+                return Boolean(new Blob());
+            } catch (e) {
+                return false;
+            }
+        }()),
+        hasArrayBufferViewSupport = hasBlobConstructor && window.Uint8Array &&
+            (function () {
                 try {
-                    return !!new Blob();
+                    return new Blob([new Uint8Array(100)]).size === 100;
                 } catch (e) {
                     return false;
                 }
-            }(),
+            }()),
         BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder ||
             window.MozBlobBuilder || window.MSBlobBuilder,
         dataURLtoBlob = (hasBlobConstructor || BlobBuilder) && window.atob &&
@@ -34,8 +42,8 @@
                     arrayBuffer,
                     intArray,
                     i,
-                    bb,
-                    mimeString;
+                    mimeString,
+                    bb;
                 if (dataURI.split(',')[0].indexOf('base64') >= 0) {
                     // Convert base64 to raw binary data held in a string:
                     byteString = atob(dataURI.split(',')[1]);
@@ -51,9 +59,12 @@
                 }
                 // Separate out the mime component:
                 mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-                // Write the ArrayBuffer to a blob:
+                // Write the ArrayBuffer (or ArrayBufferView) to a blob:
                 if (hasBlobConstructor) {
-                    return new Blob([arrayBuffer], {type: mimeString});
+                    return new Blob(
+                        [hasArrayBufferViewSupport ? intArray : arrayBuffer],
+                        {type: mimeString}
+                    );
                 }
                 bb = new BlobBuilder();
                 bb.append(arrayBuffer);
@@ -70,7 +81,7 @@
             };
         }
     }
-    if (typeof define !== 'undefined' && define.amd) {
+    if (typeof define === 'function' && define.amd) {
         define(function () {
             return dataURLtoBlob;
         });
