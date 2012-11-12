@@ -71,13 +71,13 @@
                 return bb.getBlob(mimeString);
             };
     if (window.HTMLCanvasElement && !CanvasPrototype.toBlob) {
-        if (CanvasPrototype.mozGetAsFile) {
+        if (CanvasPrototype.toDataURL && dataURLtoBlob) {
+            CanvasPrototype.toBlob = function (callback, type, quality) {
+                callback(dataURLtoBlob(this.toDataURL(type, quality)));
+            };
+        } else if (CanvasPrototype.mozGetAsFile) {
             CanvasPrototype.toBlob = function (callback, type) {
                 callback(this.mozGetAsFile('blob', type));
-            };
-        } else if (CanvasPrototype.toDataURL && dataURLtoBlob) {
-            CanvasPrototype.toBlob = function (callback, type) {
-                callback(dataURLtoBlob(this.toDataURL(type)));
             };
         }
     }
