@@ -71,15 +71,18 @@
                 return bb.getBlob(mimeString);
             };
     if (window.HTMLCanvasElement && !CanvasPrototype.toBlob) {
-        if (CanvasPrototype.mozGetAsFile) {
-            CanvasPrototype.toBlob = function (callback, type) {
-                callback(this.mozGetAsFile('blob', type));
-            };
-        } else if (CanvasPrototype.toDataURL && dataURLtoBlob) {
-            CanvasPrototype.toBlob = function (callback, type, quality) {
-                callback(dataURLtoBlob(this.toDataURL(type, quality)));
-            };
-        }
+        CanvasPrototype.toBlob = function (callback, type, quality) {
+            if(typeof(quality) === 'number') {
+                if (CanvasPrototype.toDataURL && dataURLtoBlob) {
+                    return callback(dataURLtoBlob(this.toDataURL(type, quality)));
+                }
+            } else if (CanvasPrototype.mozGetAsFile) {
+                return callback(this.mozGetAsFile('blob', type));
+            } else if (CanvasPrototype.toDataURL && dataURLtoBlob) {
+                return callback(dataURLtoBlob(this.toDataURL(type)));
+            }
+            throw 'The toBlob operation is not supported in this browser';
+        };
     }
     if (typeof define === 'function' && define.amd) {
         define(function () {
