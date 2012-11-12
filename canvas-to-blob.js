@@ -1,5 +1,5 @@
 /*
- * JavaScript Canvas to Blob 2.0.3
+ * JavaScript Canvas to Blob 2.0.4
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
  *
  * Copyright 2012, Sebastian Tschan
@@ -76,8 +76,8 @@
                 callback(this.mozGetAsFile('blob', type));
             };
         } else if (CanvasPrototype.toDataURL && dataURLtoBlob) {
-            CanvasPrototype.toBlob = function (callback, type) {
-                callback(dataURLtoBlob(this.toDataURL(type)));
+            CanvasPrototype.toBlob = function (callback, type, quality) {
+                callback(dataURLtoBlob(this.toDataURL(type, quality)));
             };
         }
     }
