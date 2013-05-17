@@ -1,5 +1,10 @@
 # JavaScript Canvas to Blob
 
+## About
+Canvas to Blob is a polyfill for the standard JavaScript [canvas.toBlob](http://www.w3.org/TR/html5/the-canvas-element.html#dom-canvas-toblob) method.
+
+It can be used to create [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) objects from an HTML [canvas](https://developer.mozilla.org/en-US/docs/HTML/Canvas) element.
+
 ## Usage
 Include the (minified) JavaScript Canvas to Blob script in your HTML markup:
 
@@ -7,7 +12,7 @@ Include the (minified) JavaScript Canvas to Blob script in your HTML markup:
 <script src="canvas-to-blob.min.js"></script>
 ```
 
-The JavaScript Canvas to Blob script is a polyfill for the standard HTML [canvas.toBlob](http://www.w3.org/TR/html5/the-canvas-element.html#dom-canvas-toblob) method:
+Then use the *canvas.toBlob()* method in the same way as the native implementation:
 
 ```js
 var canvas = document.createElement('canvas'); 
@@ -42,6 +47,22 @@ var b64Data = 'R0lGODdhUAA8AIABAAAAAP///ywAAAAAUAA8AAACS4SPqcvtD6' +
     imageUrl = 'data:image/gif;base64,' + b64Data,
     blob = window.dataURLtoBlob && window.dataURLtoBlob(imageUrl);
 ```
+
+## Browsers
+The following browsers support either the native or the polyfill *canvas.toBlob()* method:
+
+### Desktop browsers
+
+* Google Chrome (see [Chromium issue #67587](https://code.google.com/p/chromium/issues/detail?id=67587))
+* Apple Safari 6.0+ (see [Mozilla issue #648610](https://bugzilla.mozilla.org/show_bug.cgi?id=648610))
+* Mozilla Firefox 4.0+
+* Microsoft Internet Explorer 10.0+
+
+### Mobile browsers
+
+* Apple Safari Mobile on iOS 6.0+
+* Google Chrome on iOS 6.0+
+* Google Chrome on Android 4.0+
 
 ## License
 The JavaScript Canvas to Blob script is released under the [MIT license](http://www.opensource.org/licenses/MIT).
