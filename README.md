@@ -1,6 +1,6 @@
 # JavaScript Canvas to Blob
 
-## About
+## Description
 Canvas to Blob is a polyfill for the standard JavaScript [canvas.toBlob](http://www.w3.org/TR/html5/the-canvas-element.html#dom-canvas-toblob) method.
 
 It can be used to create [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) objects from an HTML [canvas](https://developer.mozilla.org/en-US/docs/HTML/Canvas) element.
@@ -9,7 +9,7 @@ It can be used to create [Blob](https://developer.mozilla.org/en-US/docs/Web/API
 Include the (minified) JavaScript Canvas to Blob script in your HTML markup:
 
 ```html
-<script src="canvas-to-blob.min.js"></script>
+<script src="js/canvas-to-blob.min.js"></script>
 ```
 
 Then use the *canvas.toBlob()* method in the same way as the native implementation:
@@ -63,6 +63,9 @@ The following browsers support either the native or the polyfill *canvas.toBlob(
 * Apple Safari Mobile on iOS 6.0+
 * Google Chrome on iOS 6.0+
 * Google Chrome on Android 4.0+
+
+## Test
+[JavaScript Canvas to Blob Test](http://blueimp.github.io/JavaScript-Canvas-to-Blob/test/)
 
 ## License
 The JavaScript Canvas to Blob script is released under the [MIT license](http://www.opensource.org/licenses/MIT).

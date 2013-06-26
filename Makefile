@@ -1,4 +1,4 @@
 .PHONY: js
 
 js:
-	uglifyjs -nc canvas-to-blob.js > canvas-to-blob.min.js
+	node_modules/.bin/uglifyjs js/canvas-to-blob.js -c -m -o js/canvas-to-blob.min.js
