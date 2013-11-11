@@ -1,5 +1,5 @@
 /*
- * JavaScript Canvas to Blob Test 2.0.1
+ * JavaScript Canvas to Blob Test 2.1.0
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
  *
  * Copyright 2012, Sebastian Tschan
@@ -15,11 +15,11 @@
     'use strict';
 
     // 80x60px GIF image (color black, base64 data):
-	var b64Data = 'R0lGODdhUAA8AIABAAAAAP///ywAAAAAUAA8AAACS4SPqcvtD6' +
+    var b64Data = 'R0lGODdhUAA8AIABAAAAAP///ywAAAAAUAA8AAACS4SPqcvtD6' +
             'OctNqLs968+w+G4kiW5omm6sq27gvH8kzX9o3n+s73/g8MCofE' +
             'ovGITCqXzKbzCY1Kp9Sq9YrNarfcrvcLDovH5PKsAAA7',
-	    imageUrl = 'data:image/gif;base64,' + b64Data,
-	    blob = window.dataURLtoBlob && window.dataURLtoBlob(imageUrl);
+        imageUrl = 'data:image/gif;base64,' + b64Data,
+        blob = window.dataURLtoBlob && window.dataURLtoBlob(imageUrl);
 
     describe('canvas.toBlob', function () {
 

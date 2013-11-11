@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!--
 /*
- * JavaScript Canvas to Blob Test 2.0.7
+ * JavaScript Canvas to Blob Test 2.1.0
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
  *
  * Copyright 2012, Sebastian Tschan
@@ -32,8 +32,10 @@ mocha.setup('bdd');
 <script src="../js/canvas-to-blob.js"></script>
 <script src="test.js"></script>
 <script>
-mocha.checkLeaks();
-mocha.run();
+if (!window.PHANTOMJS) {
+	mocha.checkLeaks();
+	mocha.run();
+}
 </script>
 </body> 
 </html>
