@@ -26,14 +26,6 @@
                 return false;
             }
         }()),
-        hasArrayBufferViewSupport = hasBlobConstructor && window.Uint8Array &&
-            (function () {
-                try {
-                    return new Blob([new Uint8Array(100)]).size === 100;
-                } catch (e) {
-                    return false;
-                }
-            }()),
         BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder ||
             window.MozBlobBuilder || window.MSBlobBuilder,
         dataURLtoBlob = (hasBlobConstructor || BlobBuilder) && window.atob &&
@@ -62,7 +54,7 @@
                 // Write the ArrayBuffer (or ArrayBufferView) to a blob:
                 if (hasBlobConstructor) {
                     return new Blob(
-                        [hasArrayBufferViewSupport ? intArray : arrayBuffer],
+                        [intArray.buffer],
                         {type: mimeString}
                     );
                 }
