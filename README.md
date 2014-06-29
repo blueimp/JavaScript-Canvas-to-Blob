@@ -1,7 +1,7 @@
 # JavaScript Canvas to Blob
 
 ## Description
-Canvas to Blob is a polyfill for the standard JavaScript [canvas.toBlob](http://www.w3.org/TR/html5/the-canvas-element.html#dom-canvas-toblob) method.
+Canvas to Blob is a polyfill for the standard JavaScript [canvas.toBlob](http://www.w3.org/TR/html5/scripting-1.html#dom-canvas-toblob) method.
 
 It can be used to create [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) objects from an HTML [canvas](https://developer.mozilla.org/en-US/docs/HTML/Canvas) element.
 
