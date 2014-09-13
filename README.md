@@ -65,7 +65,7 @@ The following browsers support either the native or the polyfill *canvas.toBlob(
 * Google Chrome on Android 4.0+
 
 ## Test
-[JavaScript Canvas to Blob Test](http://blueimp.github.io/JavaScript-Canvas-to-Blob/test/)
+[JavaScript Canvas to Blob Test](https://blueimp.github.io/JavaScript-Canvas-to-Blob/test/)
 
 ## License
 The JavaScript Canvas to Blob script is released under the [MIT license](http://www.opensource.org/licenses/MIT).
