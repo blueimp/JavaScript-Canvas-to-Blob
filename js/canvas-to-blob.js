@@ -92,4 +92,4 @@
     } else {
         window.dataURLtoBlob = dataURLtoBlob;
     }
-}(this));
+}(window));

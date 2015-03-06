@@ -32,6 +32,7 @@
       "url": "http://www.opensource.org/licenses/MIT"
     }
   ],
+  "main": "js/canvas-to-blob.js",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-uglify": "~0.2.7",
