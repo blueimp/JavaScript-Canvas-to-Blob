@@ -26,12 +26,7 @@
     "url": "git://github.com/blueimp/JavaScript-Canvas-to-Blob.git"
   },
   "bugs": "https://github.com/blueimp/JavaScript-Canvas-to-Blob/issues",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/MIT"
-    }
-  ],
+  "license": "MIT",
   "main": "js/canvas-to-blob.js",
   "ignore": [
     "/*.*",
