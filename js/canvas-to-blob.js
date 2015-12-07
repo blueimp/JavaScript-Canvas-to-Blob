@@ -50,7 +50,9 @@
                     bb;
                 // Parse the dataURI components as per RFC 2397
                 matches = dataURI.match(dataURIPattern);
-                if (!matches) throw new Error('invalid data URI');
+                if (!matches) {
+                    throw new Error('invalid data URI');
+                }
                 // Default to text/plain;charset=US-ASCII
                 mediaType = matches[2] ?
                     matches[1] :
