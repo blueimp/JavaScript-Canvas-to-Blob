@@ -1,5 +1,5 @@
 /*
- * JavaScript Canvas to Blob Test 2.1.0
+ * JavaScript Canvas to Blob Test
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
  *
  * Copyright 2012, Sebastian Tschan

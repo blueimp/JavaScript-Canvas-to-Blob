@@ -1,5 +1,5 @@
 /*
- * JavaScript Canvas to Blob 2.0.5
+ * JavaScript Canvas to Blob
  * https://github.com/blueimp/JavaScript-Canvas-to-Blob
  *
  * Copyright 2012, Sebastian Tschan
