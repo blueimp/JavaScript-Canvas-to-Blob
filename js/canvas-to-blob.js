@@ -36,20 +36,33 @@
             }()),
         BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder ||
             window.MozBlobBuilder || window.MSBlobBuilder,
+        dataURIPattern = /^data:((.*?)(;charset=.*?)?)(;base64)?,/,
         dataURLtoBlob = (hasBlobConstructor || BlobBuilder) && window.atob &&
             window.ArrayBuffer && window.Uint8Array && function (dataURI) {
-                var byteString,
+                var matches,
+                    mediaType,
+                    isBase64,
+                    dataString,
+                    byteString,
                     arrayBuffer,
                     intArray,
                     i,
-                    mimeString,
                     bb;
-                if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+                // Parse the dataURI components as per RFC 2397
+                matches = dataURI.match(dataURIPattern);
+                if (!matches) throw new Error('invalid data URI');
+                // Default to text/plain;charset=US-ASCII
+                mediaType = matches[2] ?
+                    matches[1] :
+                    'text/plain' + (matches[3] || ';charset=US-ASCII');
+                isBase64 = !!matches[4];
+                dataString = dataURI.slice(matches[0].length);
+                if (isBase64) {
                     // Convert base64 to raw binary data held in a string:
-                    byteString = atob(dataURI.split(',')[1]);
+                    byteString = atob(dataString);
                 } else {
                     // Convert base64/URLEncoded data component to raw binary data:
-                    byteString = decodeURIComponent(dataURI.split(',')[1]);
+                    byteString = decodeURIComponent(dataString);
                 }
                 // Write the bytes of the string to an ArrayBuffer:
                 arrayBuffer = new ArrayBuffer(byteString.length);
@@ -57,18 +70,16 @@
                 for (i = 0; i < byteString.length; i += 1) {
                     intArray[i] = byteString.charCodeAt(i);
                 }
-                // Separate out the mime component:
-                mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
                 // Write the ArrayBuffer (or ArrayBufferView) to a blob:
                 if (hasBlobConstructor) {
                     return new Blob(
                         [hasArrayBufferViewSupport ? intArray : arrayBuffer],
-                        {type: mimeString}
+                        {type: mediaType}
                     );
                 }
                 bb = new BlobBuilder();
                 bb.append(arrayBuffer);
-                return bb.getBlob(mimeString);
+                return bb.getBlob(mediaType);
             };
     if (window.HTMLCanvasElement && !CanvasPrototype.toBlob) {
         if (CanvasPrototype.mozGetAsFile) {
