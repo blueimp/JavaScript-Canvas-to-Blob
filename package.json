@@ -29,12 +29,11 @@
   "license": "MIT",
   "main": "./js/canvas-to-blob.js",
   "devDependencies": {
-    "grunt": "0.4.5",
-    "grunt-bump-build-git": "1.1.2",
-    "grunt-contrib-jshint": "0.11.3",
-    "grunt-contrib-uglify": "0.11.0"
+    "jshint": "2.8.0",
+    "uglify-js": "2.6.1"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "jshint js/canvas-to-blob.js test/test.js",
+    "build": "uglifyjs js/canvas-to-blob.js -c -m > js/canvas-to-blob.min.js"
   }
 }
