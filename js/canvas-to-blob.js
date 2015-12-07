@@ -61,7 +61,7 @@
                     // Convert base64 to raw binary data held in a string:
                     byteString = atob(dataString);
                 } else {
-                    // Convert base64/URLEncoded data component to raw binary data:
+                    // Convert base64/URLEncoded data component to raw binary:
                     byteString = decodeURIComponent(dataString);
                 }
                 // Write the bytes of the string to an ArrayBuffer:
