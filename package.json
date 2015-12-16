@@ -33,7 +33,7 @@
     "uglify-js": "2.6.1"
   },
   "scripts": {
-    "test": "jshint js/canvas-to-blob.js test/test.js",
+    "test": "jshint js test",
     "build": "uglifyjs js/canvas-to-blob.js -c -m > js/canvas-to-blob.min.js",
     "preversion": "npm test",
     "version": "npm run build && git add -A js",
