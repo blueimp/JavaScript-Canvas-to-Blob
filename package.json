@@ -15,17 +15,10 @@
     "name": "Sebastian Tschan",
     "url": "https://blueimp.net"
   },
-  "maintainers": [
-    {
-      "name": "Sebastian Tschan",
-      "url": "https://blueimp.net"
-    }
-  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/blueimp/JavaScript-Canvas-to-Blob.git"
   },
-  "bugs": "https://github.com/blueimp/JavaScript-Canvas-to-Blob/issues",
   "license": "MIT",
   "main": "./js/canvas-to-blob.js",
   "devDependencies": {
