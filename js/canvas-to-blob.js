@@ -12,8 +12,7 @@
  * http://stackoverflow.com/q/4998908
  */
 
-/*jslint nomen: true, regexp: true */
-/*global window, atob, Blob, ArrayBuffer, Uint8Array, define */
+/*global window, atob, Blob, ArrayBuffer, Uint8Array, define, module */
 
 (function (window) {
     'use strict';
@@ -102,6 +101,8 @@
         define(function () {
             return dataURLtoBlob;
         });
+    } else if (typeof module === 'object' && module.exports) {
+        module.exports = dataURLtoBlob;
     } else {
         window.dataURLtoBlob = dataURLtoBlob;
     }

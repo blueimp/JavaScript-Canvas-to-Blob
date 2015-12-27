@@ -47,7 +47,8 @@ function.
 ## API
 In addition to the **canvas.toBlob** polyfill, the JavaScript Canvas to Blob
 script provides one additional function called **dataURLtoBlob**, which is added
-to the global window object if no AMD loader is used to load the script:
+to the global window object, unless the library is loaded via a module loader
+like RequireJS, Browserify or webpack:
 
 ```js
 // 80x60px GIF image (color black, base64 data):
