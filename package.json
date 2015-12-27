@@ -28,7 +28,7 @@
   },
   "scripts": {
     "test": "jshint js test && mocha-phantomjs test/index.html",
-    "build": "uglifyjs js/canvas-to-blob.js -c -m > js/canvas-to-blob.min.js",
+    "build": "cd js && uglifyjs canvas-to-blob.js -c -m -o canvas-to-blob.min.js --source-map canvas-to-blob.min.js.map",
     "preversion": "npm test",
     "version": "npm run build && git add -A js",
     "postversion": "git push --tags origin master master:gh-pages && npm publish"
