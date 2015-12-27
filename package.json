@@ -2,7 +2,7 @@
   "name": "blueimp-canvas-to-blob",
   "version": "2.2.4",
   "title": "JavaScript Canvas to Blob",
-  "description": "JavaScript Canvas to Blob is a function to convert canvas elements into Blob objects.",
+  "description": "Canvas to Blob is a polyfill for the standard JavaScript canvas.toBlob method. It can be used to create Blob objects from an HTML canvas element.",
   "keywords": [
     "javascript",
     "canvas",
@@ -23,10 +23,11 @@
   "main": "./js/canvas-to-blob.js",
   "devDependencies": {
     "jshint": "2.8.0",
+    "mocha-phantomjs": "4.0.1",
     "uglify-js": "2.6.1"
   },
   "scripts": {
-    "test": "jshint js test",
+    "test": "jshint js test && mocha-phantomjs --ssl-protocol=any test/index.html",
     "build": "uglifyjs js/canvas-to-blob.js -c -m > js/canvas-to-blob.min.js",
     "preversion": "npm test",
     "version": "npm run build && git add -A js",
