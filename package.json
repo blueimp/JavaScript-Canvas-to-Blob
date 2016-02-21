@@ -22,33 +22,15 @@
   "license": "MIT",
   "main": "./js/canvas-to-blob.js",
   "devDependencies": {
-    "jshint": "2.8.0",
     "mocha-phantomjs": "4.0.1",
+    "standard": "6.0.7",
     "uglify-js": "2.6.1"
   },
   "scripts": {
-    "test": "jshint js test && mocha-phantomjs test/index.html",
+    "test": "standard js/*.js test/*.js && mocha-phantomjs test/index.html",
     "build": "cd js && uglifyjs canvas-to-blob.js -c -m -o canvas-to-blob.min.js --source-map canvas-to-blob.min.js.map",
     "preversion": "npm test",
     "version": "npm run build && git add -A js",
     "postversion": "git push --tags origin master master:gh-pages && npm publish"
-  },
-  "jshintConfig": {
-    "bitwise": true,
-    "curly": true,
-    "eqeqeq": true,
-    "forin": true,
-    "freeze": true,
-    "immed": true,
-    "latedef": true,
-    "newcap": true,
-    "noarg": true,
-    "noempty": true,
-    "nonbsp": true,
-    "nonew": true,
-    "quotmark": true,
-    "undef": true,
-    "unused": true,
-    "strict": true
   }
 }
