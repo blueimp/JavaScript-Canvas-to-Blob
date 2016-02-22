@@ -26,8 +26,8 @@
       window.loadImage(blob, function (canvas) {
         canvas.toBlob(
           function (newBlob) {
-            done()
             expect(newBlob).to.be.a(Blob)
+            done()
           }
         )
       }, {canvas: true})
@@ -37,8 +37,8 @@
       window.loadImage(blob, function (canvas) {
         canvas.toBlob(
           function (newBlob) {
-            done()
             expect(newBlob.type).to.be('image/png')
+            done()
           },
           'image/png'
         )
@@ -49,8 +49,8 @@
       window.loadImage(blob, function (canvas) {
         canvas.toBlob(
           function (newBlob) {
-            done()
             expect(newBlob.type).to.be('image/jpeg')
+            done()
           },
           'image/jpeg'
         )
@@ -62,9 +62,9 @@
         canvas.toBlob(
           function (newBlob) {
             window.loadImage(newBlob, function (img) {
-              done()
               expect(img.width).to.be(canvas.width)
               expect(img.height).to.be(canvas.height)
+              done()
             })
           }
         )
@@ -80,9 +80,9 @@
                   .getImageData(0, 0, canvas.width, canvas.height)
               var newCanvasData = newCanvas.getContext('2d')
                   .getImageData(0, 0, newCanvas.width, newCanvas.height)
-              done()
               expect(canvasData.width).to.be(newCanvasData.width)
               expect(canvasData.height).to.be(newCanvasData.height)
+              done()
             }, {canvas: true})
           }
         )
