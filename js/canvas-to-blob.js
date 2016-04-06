@@ -14,8 +14,8 @@
 
 /*global window, atob, Blob, ArrayBuffer, Uint8Array, define, module */
 
-(function (window) {
-  'use strict';
+;(function (window) {
+  'use strict'
 
   var CanvasPrototype = window.HTMLCanvasElement &&
                           window.HTMLCanvasElement.prototype
