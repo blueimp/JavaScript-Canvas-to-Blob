@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/MIT
  */
 
-/*global window, describe, it, Blob */
+/* global describe, it, Blob */
 
 ;(function (expect) {
   'use strict'
@@ -26,7 +26,7 @@
       window.loadImage(blob, function (canvas) {
         canvas.toBlob(
           function (newBlob) {
-            expect(newBlob).to.be.a(Blob)
+            expect(newBlob).to.be.a.instanceOf(Blob)
             done()
           }
         )
@@ -37,7 +37,7 @@
       window.loadImage(blob, function (canvas) {
         canvas.toBlob(
           function (newBlob) {
-            expect(newBlob.type).to.be('image/png')
+            expect(newBlob.type).to.equal('image/png')
             done()
           },
           'image/png'
@@ -49,7 +49,7 @@
       window.loadImage(blob, function (canvas) {
         canvas.toBlob(
           function (newBlob) {
-            expect(newBlob.type).to.be('image/jpeg')
+            expect(newBlob.type).to.equal('image/jpeg')
             done()
           },
           'image/jpeg'
@@ -62,8 +62,8 @@
         canvas.toBlob(
           function (newBlob) {
             window.loadImage(newBlob, function (img) {
-              expect(img.width).to.be(canvas.width)
-              expect(img.height).to.be(canvas.height)
+              expect(img.width).to.equal(canvas.width)
+              expect(img.height).to.equal(canvas.height)
               done()
             })
           }
@@ -80,8 +80,8 @@
                   .getImageData(0, 0, canvas.width, canvas.height)
               var newCanvasData = newCanvas.getContext('2d')
                   .getImageData(0, 0, newCanvas.width, newCanvas.height)
-              expect(canvasData.width).to.be(newCanvasData.width)
-              expect(canvasData.height).to.be(newCanvasData.height)
+              expect(canvasData.width).to.equal(newCanvasData.width)
+              expect(canvasData.height).to.equal(newCanvasData.height)
               done()
             }, {canvas: true})
           }
@@ -89,4 +89,4 @@
       }, {canvas: true})
     })
   })
-}(this.expect))
+}(this.chai.expect))
