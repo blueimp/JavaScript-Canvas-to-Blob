@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/MIT
  */
 
-/*global define, module, window, document, URL, webkitURL, FileReader */
+/* global define, URL, webkitURL, FileReader */
 
 ;(function ($) {
   'use strict'
@@ -17,26 +17,20 @@
   // Loads an image for a given File object.
   // Invokes the callback with an img or optional canvas
   // element (if supported by the browser) as parameter:
-  var loadImage = function (file, callback, options) {
+  function loadImage (file, callback, options) {
     var img = document.createElement('img')
     var url
-    var oUrl
-    img.onerror = callback
-    img.onload = function () {
-      if (oUrl && !(options && options.noRevoke)) {
-        loadImage.revokeObjectURL(oUrl)
-      }
-      if (callback) {
-        callback(loadImage.scale(img, options))
-      }
+    img.onerror = function (event) {
+      return loadImage.onerror(img, event, file, callback, options)
+    }
+    img.onload = function (event) {
+      return loadImage.onload(img, event, file, callback, options)
     }
     if (loadImage.isInstanceOf('Blob', file) ||
       // Files are also Blob instances, but some browsers
       // (Firefox 3.6) support the File API but not Blobs:
       loadImage.isInstanceOf('File', file)) {
-      url = oUrl = loadImage.createObjectURL(file)
-      // Store the file type for resize processing:
-      img._type = file.type
+      url = img._objectURL = loadImage.createObjectURL(file)
     } else if (typeof file === 'string') {
       url = file
       if (options && options.crossOrigin) {
@@ -53,10 +47,8 @@
       var target = e.target
       if (target && target.result) {
         img.src = target.result
-      } else {
-        if (callback) {
-          callback(e)
-        }
+      } else if (callback) {
+        callback(e)
       }
     })
   }
@@ -66,9 +58,34 @@
                 (window.URL && URL.revokeObjectURL && URL) ||
                 (window.webkitURL && webkitURL)
 
+  function revokeHelper (img, options) {
+    if (img._objectURL && !(options && options.noRevoke)) {
+      loadImage.revokeObjectURL(img._objectURL)
+      delete img._objectURL
+    }
+  }
+
   loadImage.isInstanceOf = function (type, obj) {
     // Cross-frame instanceof check
     return Object.prototype.toString.call(obj) === '[object ' + type + ']'
+  }
+
+  loadImage.transform = function (img, options, callback, file, data) {
+    callback(loadImage.scale(img, options, data), data)
+  }
+
+  loadImage.onerror = function (img, event, file, callback, options) {
+    revokeHelper(img, options)
+    if (callback) {
+      callback.call(img, event)
+    }
+  }
+
+  loadImage.onload = function (img, event, file, callback, options) {
+    revokeHelper(img, options)
+    if (callback) {
+      loadImage.transform(img, options, callback, file, {})
+    }
   }
 
   // Transform image coordinates, allows to override e.g.
@@ -109,8 +126,7 @@
     return newOptions
   }
 
-  // Canvas render method, allows to override the
-  // rendering e.g. to work around issues on iOS:
+  // Canvas render method, allows to implement a different rendering algorithm:
   loadImage.renderImageToCanvas = function (
     canvas,
     img,
@@ -137,8 +153,7 @@
     return canvas
   }
 
-  // This method is used to determine if the target image
-  // should be a canvas element:
+  // Determines if the target image should be a canvas element:
   loadImage.hasCanvasOption = function (options) {
     return options.canvas || options.crop || !!options.aspectRatio
   }
@@ -148,7 +163,7 @@
   // Returns a canvas object if the browser supports canvas
   // and the hasCanvasOption method returns true or a canvas
   // object is passed as image, else the scaled image:
-  loadImage.scale = function (img, options) {
+  loadImage.scale = function (img, options, data) {
     options = options || {}
     var canvas = document.createElement('canvas')
     var useCanvas = img.getContext ||
@@ -189,7 +204,7 @@
       }
     }
     if (useCanvas) {
-      options = loadImage.getTransformedOptions(img, options)
+      options = loadImage.getTransformedOptions(img, options, data)
       sourceX = options.left || 0
       sourceY = options.top || 0
       if (options.sourceWidth) {
