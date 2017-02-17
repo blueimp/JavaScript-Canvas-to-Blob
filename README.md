@@ -81,4 +81,4 @@ The following browsers support either the native or the polyfill
 
 ## License
 The JavaScript Canvas to Blob script is released under the
-[MIT license](http://www.opensource.org/licenses/MIT).
+[MIT license](https://opensource.org/licenses/MIT).
