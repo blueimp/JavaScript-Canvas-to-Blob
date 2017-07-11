@@ -59,6 +59,23 @@ var b64Data = 'R0lGODdhUAA8AIABAAAAAP///ywAAAAAUAA8AAACS4SPqcvtD6' +
     blob = window.dataURLtoBlob && window.dataURLtoBlob(imageUrl);
 ```
 
+E.g. Via Npm/Browserify:
+```shell
+npm i blueimp-canvas-to-blob
+```
+
+Requiring loads the dataURLtoBlob function.
+```js
+var dataURLtoBlob = require('blueimp-canvas-to-blob');
+
+// 80x60px GIF image (color black, base64 data):
+var b64Data = 'R0lGODdhUAA8AIABAAAAAP///ywAAAAAUAA8AAACS4SPqcvtD6' +
+        'OctNqLs968+w+G4kiW5omm6sq27gvH8kzX9o3n+s73/g8MCofE' +
+        'ovGITCqXzKbzCY1Kp9Sq9YrNarfcrvcLDovH5PKsAAA7',
+    imageUrl = 'data:image/gif;base64,' + b64Data,
+    blob = dataURLtoBlob(imageURL);
+```
+
 ## Browsers
 The following browsers support either the native or the polyfill
 *canvas.toBlob()* method:
