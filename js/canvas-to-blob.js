@@ -95,7 +95,6 @@
           callback(self.mozGetAsFile('blob', type))
         }
         });
-     
       }
     } else if (CanvasPrototype.toDataURL && dataURLtoBlob) {
       CanvasPrototype.toBlob = function (callback, type, quality) {
