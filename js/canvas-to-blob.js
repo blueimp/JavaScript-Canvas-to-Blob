@@ -17,28 +17,38 @@
 ;(function (window) {
   'use strict'
 
-  var CanvasPrototype = window.HTMLCanvasElement &&
-                          window.HTMLCanvasElement.prototype
-  var hasBlobConstructor = window.Blob && (function () {
-    try {
-      return Boolean(new Blob())
-    } catch (e) {
-      return false
-    }
-  }())
-  var hasArrayBufferViewSupport = hasBlobConstructor && window.Uint8Array &&
+  var CanvasPrototype =
+    window.HTMLCanvasElement && window.HTMLCanvasElement.prototype
+  var hasBlobConstructor =
+    window.Blob &&
+    (function () {
+      try {
+        return Boolean(new Blob())
+      } catch (e) {
+        return false
+      }
+    })()
+  var hasArrayBufferViewSupport =
+    hasBlobConstructor &&
+    window.Uint8Array &&
     (function () {
       try {
         return new Blob([new Uint8Array(100)]).size === 100
       } catch (e) {
         return false
       }
-    }())
-  var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder ||
-                      window.MozBlobBuilder || window.MSBlobBuilder
+    })()
+  var BlobBuilder =
+    window.BlobBuilder ||
+    window.WebKitBlobBuilder ||
+    window.MozBlobBuilder ||
+    window.MSBlobBuilder
   var dataURIPattern = /^data:((.*?)(;charset=.*?)?)(;base64)?,/
-  var dataURLtoBlob = (hasBlobConstructor || BlobBuilder) && window.atob &&
-    window.ArrayBuffer && window.Uint8Array &&
+  var dataURLtoBlob =
+    (hasBlobConstructor || BlobBuilder) &&
+    window.atob &&
+    window.ArrayBuffer &&
+    window.Uint8Array &&
     function (dataURI) {
       var matches,
         mediaType,
@@ -75,10 +85,9 @@
       }
       // Write the ArrayBuffer (or ArrayBufferView) to a blob:
       if (hasBlobConstructor) {
-        return new Blob(
-          [hasArrayBufferViewSupport ? intArray : arrayBuffer],
-          {type: mediaType}
-        )
+        return new Blob([hasArrayBufferViewSupport ? intArray : arrayBuffer], {
+          type: mediaType
+        })
       }
       bb = new BlobBuilder()
       bb.append(arrayBuffer)
@@ -114,4 +123,4 @@
   } else {
     window.dataURLtoBlob = dataURLtoBlob
   }
-}(window))
+})(window)
