@@ -38,7 +38,7 @@
     "lint": "eslint .",
     "serve": "http-server . -a 127.0.0.1 -p $PORT -s",
     "mocha": "mocha-chrome http://127.0.0.1:$PORT/test",
-    "unit": "PORT=$(get-port) concurrently -k 'npm run serve' 'npm run mocha'",
+    "unit": "PORT=$(get-port) concurrently -k -s first 'npm run serve' 'npm run mocha'",
     "test": "npm run lint && npm run unit",
     "build": "cd js && uglifyjs canvas-to-blob.js -c -m -o canvas-to-blob.min.js --source-map url=canvas-to-blob.min.js.map",
     "preversion": "npm test",
