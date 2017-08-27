@@ -77,9 +77,9 @@
           function (newBlob) {
             window.loadImage(newBlob, function (newCanvas) {
               var canvasData = canvas.getContext('2d')
-                  .getImageData(0, 0, canvas.width, canvas.height)
+                .getImageData(0, 0, canvas.width, canvas.height)
               var newCanvasData = newCanvas.getContext('2d')
-                  .getImageData(0, 0, newCanvas.width, newCanvas.height)
+                .getImageData(0, 0, newCanvas.width, newCanvas.height)
               expect(canvasData.width).to.equal(newCanvasData.width)
               expect(canvasData.height).to.equal(newCanvasData.height)
               done()
