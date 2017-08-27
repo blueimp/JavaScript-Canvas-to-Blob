@@ -9,22 +9,30 @@
  * https://opensource.org/licenses/MIT
  */
 
-/* global describe, it, Blob */
+/* global describe, it, Blob, chai, dataURLtoBlob */
 
-;(function (expect) {
+;(function () {
   'use strict'
+
+  var expect = chai.expect
+  var canvasToBlob = function (canvas, callback, type, quality) {
+    setTimeout(function () {
+      callback(dataURLtoBlob(canvas.toDataURL(type, quality)))
+    })
+  }
 
   // 80x60px GIF image (color black, base64 data):
   var b64Data = 'R0lGODdhUAA8AIABAAAAAP///ywAAAAAUAA8AAACS4SPqcvtD6' +
       'OctNqLs968+w+G4kiW5omm6sq27gvH8kzX9o3n+s73/g8MCofE' +
       'ovGITCqXzKbzCY1Kp9Sq9YrNarfcrvcLDovH5PKsAAA7'
   var imageUrl = 'data:image/gif;base64,' + b64Data
-  var blob = window.dataURLtoBlob && window.dataURLtoBlob(imageUrl)
+  var blob = dataURLtoBlob(imageUrl)
 
   describe('canvas.toBlob', function () {
     it('Converts a canvas element to a blob and passes it to the callback function', function (done) {
       window.loadImage(blob, function (canvas) {
-        canvas.toBlob(
+        canvasToBlob(
+          canvas,
           function (newBlob) {
             expect(newBlob).to.be.a.instanceOf(Blob)
             done()
@@ -35,7 +43,8 @@
 
     it('Converts a canvas element to a PNG blob', function (done) {
       window.loadImage(blob, function (canvas) {
-        canvas.toBlob(
+        canvasToBlob(
+          canvas,
           function (newBlob) {
             expect(newBlob.type).to.equal('image/png')
             done()
@@ -47,7 +56,8 @@
 
     it('Converts a canvas element to a JPG blob', function (done) {
       window.loadImage(blob, function (canvas) {
-        canvas.toBlob(
+        canvasToBlob(
+          canvas,
           function (newBlob) {
             expect(newBlob.type).to.equal('image/jpeg')
             done()
@@ -59,7 +69,8 @@
 
     it('Keeps the aspect ratio of the canvas image', function (done) {
       window.loadImage(blob, function (canvas) {
-        canvas.toBlob(
+        canvasToBlob(
+          canvas,
           function (newBlob) {
             window.loadImage(newBlob, function (img) {
               expect(img.width).to.equal(canvas.width)
@@ -73,7 +84,8 @@
 
     it('Keeps the image data of the canvas image', function (done) {
       window.loadImage(blob, function (canvas) {
-        canvas.toBlob(
+        canvasToBlob(
+          canvas,
           function (newBlob) {
             window.loadImage(newBlob, function (newCanvas) {
               var canvasData = canvas.getContext('2d')
@@ -89,4 +101,4 @@
       }, {canvas: true})
     })
   })
-}(this.chai.expect))
+}())
