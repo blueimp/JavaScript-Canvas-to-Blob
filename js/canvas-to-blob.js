@@ -123,4 +123,4 @@
   } else {
     window.dataURLtoBlob = dataURLtoBlob
   }
-})(window)
+})(this)
