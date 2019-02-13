@@ -14,7 +14,7 @@
 
 /* global atob, Blob, define */
 
-;(function (window) {
+(function (window) {
   'use strict'
 
   var CanvasPrototype =
