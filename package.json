@@ -20,23 +20,39 @@
     "url": "git://github.com/blueimp/JavaScript-Canvas-to-Blob.git"
   },
   "license": "MIT",
-  "main": "./js/canvas-to-blob.js",
   "devDependencies": {
-    "concurrently": "^3.5.0",
-    "eslint": "^4.5.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-node": "^5.1.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "get-port-cli": "^1.1.0",
-    "http-server": "^0.10.0",
-    "mocha-chrome": "^0.1.1",
-    "prettier-eslint-cli": "^4.2.1",
-    "uglify-js": "^3.0.28"
+    "concurrently": "4",
+    "eslint": "6",
+    "eslint-config-blueimp": "1",
+    "eslint-config-prettier": "6",
+    "eslint-plugin-jsdoc": "15",
+    "eslint-plugin-prettier": "3",
+    "prettier": "1",
+    "get-port-cli": "2",
+    "http-server": "0",
+    "mocha-chrome": "2",
+    "uglify-js": "3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "blueimp",
+      "plugin:jsdoc/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "env": {
+      "browser": true
+    }
+  },
+  "eslintIgnore": [
+    "js/*.min.js",
+    "test/vendor"
+  ],
+  "prettier": {
+    "proseWrap": "always",
+    "semi": false,
+    "singleQuote": true
   },
   "scripts": {
-    "format": "prettier-eslint --no-semi --single-quote --write **/*.js",
     "lint": "eslint .",
     "serve": "http-server . -a 127.0.0.1 -p $PORT -s",
     "mocha": "mocha-chrome http://127.0.0.1:$PORT/test",
@@ -46,5 +62,10 @@
     "preversion": "npm test",
     "version": "npm run build && git add -A js",
     "postversion": "git push --tags origin master master:gh-pages && npm publish"
-  }
+  },
+  "files": [
+    "js/*.js",
+    "js/*.js.map"
+  ],
+  "main": "./js/canvas-to-blob.js"
 }
