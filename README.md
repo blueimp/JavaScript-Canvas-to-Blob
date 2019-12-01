@@ -57,8 +57,8 @@ function.
 
 ## API
 
-In addition to the **canvas.toBlob** polyfill, the JavaScript Canvas to Blob
-script provides one additional function called **dataURLtoBlob**, which is added
+In addition to the `canvas.toBlob` polyfill, the JavaScript Canvas to Blob
+script provides one additional function called `dataURLtoBlob`, which is added
 to the global window object, unless the library is loaded via a module loader
 like RequireJS, Browserify or webpack:
 
