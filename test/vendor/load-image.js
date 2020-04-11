@@ -27,30 +27,38 @@
   function loadImage(file, callback, options) {
     var img = document.createElement('img')
     var url
+    /**
+     * Callback for the fetchBlob call.
+     *
+     * @param {Blob} blob Blob object
+     * @param {Error} err Error object
+     */
+    function fetchBlobCallback(blob, err) {
+      if (err) console.log(err) // eslint-disable-line no-console
+      if (blob && loadImage.isInstanceOf('Blob', blob)) {
+        // eslint-disable-next-line no-param-reassign
+        file = blob
+        url = loadImage.createObjectURL(file)
+      } else {
+        url = file
+        if (options && options.crossOrigin) {
+          img.crossOrigin = options.crossOrigin
+        }
+      }
+      img.src = url
+    }
     img.onerror = function (event) {
-      return loadImage.onerror(img, event, file, callback, options)
+      return loadImage.onerror(img, event, file, url, callback, options)
     }
     img.onload = function (event) {
-      return loadImage.onload(img, event, file, callback, options)
+      return loadImage.onload(img, event, file, url, callback, options)
     }
     if (typeof file === 'string') {
-      loadImage.fetchBlob(
-        file,
-        function (blob) {
-          if (blob && loadImage.isInstanceOf('Blob', blob)) {
-            // eslint-disable-next-line no-param-reassign
-            file = blob
-            url = loadImage.createObjectURL(file)
-          } else {
-            url = file
-            if (options && options.crossOrigin) {
-              img.crossOrigin = options.crossOrigin
-            }
-          }
-          img.src = url
-        },
-        options
-      )
+      if (loadImage.hasMetaOption(options)) {
+        loadImage.fetchBlob(file, fetchBlobCallback, options)
+      } else {
+        fetchBlobCallback()
+      }
       return img
     } else if (
       loadImage.isInstanceOf('Blob', file) ||
@@ -58,7 +66,7 @@
       // (Firefox 3.6) support the File API but not Blobs:
       loadImage.isInstanceOf('File', file)
     ) {
-      url = img._objectURL = loadImage.createObjectURL(file)
+      url = loadImage.createObjectURL(file)
       if (url) {
         img.src = url
         return img
@@ -83,14 +91,19 @@
   /**
    * Helper function to revoke an object URL
    *
-   * @param {HTMLImageElement} img Image element
+   * @param {string} url Blob Object URL
    * @param {object} [options] Options object
    */
-  function revokeHelper(img, options) {
-    if (img._objectURL && !(options && options.noRevoke)) {
-      loadImage.revokeObjectURL(img._objectURL)
-      delete img._objectURL
+  function revokeHelper(url, options) {
+    if (url && url.slice(0, 5) === 'blob:' && !(options && options.noRevoke)) {
+      loadImage.revokeObjectURL(url)
     }
+  }
+
+  // Determines if meta data should be loaded automatically.
+  // Requires the load image meta extension to load meta data.
+  loadImage.hasMetaOption = function (options) {
+    return options && options.meta
   }
 
   // If the callback given to this function returns a blob, it is used as image
@@ -109,15 +122,15 @@
     callback(img, data)
   }
 
-  loadImage.onerror = function (img, event, file, callback, options) {
-    revokeHelper(img, options)
+  loadImage.onerror = function (img, event, file, url, callback, options) {
+    revokeHelper(url, options)
     if (callback) {
       callback.call(img, event)
     }
   }
 
-  loadImage.onload = function (img, event, file, callback, options) {
-    revokeHelper(img, options)
+  loadImage.onload = function (img, event, file, url, callback, options) {
+    revokeHelper(url, options)
     if (callback) {
       loadImage.transform(img, options, callback, file, {
         originalWidth: img.naturalWidth || img.width,
