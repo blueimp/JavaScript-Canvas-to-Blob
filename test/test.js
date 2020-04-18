@@ -21,11 +21,14 @@
     })
   }
 
-  // 80x60px GIF image (color black, base64 data):
+  // black 60x40 GIF
+  // Image data layout (B=black, F=white), scaled to 3x2:
+  // BFF
+  // BBB
   var b64Data =
-    'R0lGODdhUAA8AIABAAAAAP///ywAAAAAUAA8AAACS4SPqcvtD6' +
-    'OctNqLs968+w+G4kiW5omm6sq27gvH8kzX9o3n+s73/g8MCofE' +
-    'ovGITCqXzKbzCY1Kp9Sq9YrNarfcrvcLDovH5PKsAAA7'
+    'R0lGODlhPAAoAPECAAAAAP///wAAAAAAACH5BAUAAAIALAAAAAA8ACgAQAJihI+Zwe0Po3Sq' +
+    '1okztvzoDwbdSJbmiaaqGbbTCrjyA9f2jef6Ts6+uPrNYEIZsdg6IkG8pvMJjUqnVOgypLxm' +
+    'stpXsLv9gr2q8UZshnDTjTUbWH7TqvS6/Y7P6/f8vv9vVwAAOw=='
   var imageUrl = 'data:image/gif;base64,' + b64Data
   var blob = dataURLtoBlob(imageUrl)
 
