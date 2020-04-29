@@ -27,6 +27,16 @@
 
   var originalTransform = loadImage.transform
 
+  loadImage.createCanvas = function (width, height, offscreen) {
+    if (offscreen && loadImage.global.OffscreenCanvas) {
+      return new OffscreenCanvas(width, height)
+    }
+    var canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+    return canvas
+  }
+
   loadImage.transform = function (img, options, callback, file, data) {
     originalTransform.call(
       loadImage,
@@ -40,12 +50,12 @@
 
   // Transform image coordinates, allows to override e.g.
   // the canvas orientation based on the orientation option,
-  // gets canvas, options passed as arguments:
+  // gets canvas, options and data passed as arguments:
   loadImage.transformCoordinates = function () {}
 
   // Returns transformed options, allows to override e.g.
   // maxWidth, maxHeight and crop options based on the aspectRatio.
-  // gets img, options passed as arguments:
+  // gets img, options, data passed as arguments:
   loadImage.getTransformedOptions = function (img, options) {
     var aspectRatio = options.aspectRatio
     var newOptions
@@ -75,21 +85,20 @@
   }
 
   // Canvas render method, allows to implement a different rendering algorithm:
-  loadImage.renderImageToCanvas = function (
-    canvas,
+  loadImage.drawImage = function (
     img,
+    canvas,
     sourceX,
     sourceY,
     sourceWidth,
     sourceHeight,
-    destX,
-    destY,
     destWidth,
     destHeight,
     options
   ) {
     var ctx = canvas.getContext('2d')
     if (options.imageSmoothingEnabled === false) {
+      ctx.msImageSmoothingEnabled = false
       ctx.imageSmoothingEnabled = false
     } else if (options.imageSmoothingQuality) {
       ctx.imageSmoothingQuality = options.imageSmoothingQuality
@@ -100,31 +109,30 @@
       sourceY,
       sourceWidth,
       sourceHeight,
-      destX,
-      destY,
+      0,
+      0,
       destWidth,
       destHeight
     )
-    return canvas
+    return ctx
   }
 
   // Determines if the target image should be a canvas element:
-  loadImage.hasCanvasOption = function (options) {
+  loadImage.requiresCanvas = function (options) {
     return options.canvas || options.crop || !!options.aspectRatio
   }
 
   // Scales and/or crops the given image (img or canvas HTML element)
-  // using the given options.
-  // Returns a canvas object if the browser supports canvas
-  // and the hasCanvasOption method returns true or a canvas
-  // object is passed as image, else the scaled image:
+  // using the given options:
   loadImage.scale = function (img, options, data) {
     // eslint-disable-next-line no-param-reassign
     options = options || {}
-    var canvas = document.createElement('canvas')
+    // eslint-disable-next-line no-param-reassign
+    data = data || {}
     var useCanvas =
       img.getContext ||
-      (loadImage.hasCanvasOption(options) && canvas.getContext)
+      (loadImage.requiresCanvas(options) &&
+        !!loadImage.global.HTMLCanvasElement)
     var width = img.naturalWidth || img.width
     var height = img.naturalHeight || img.height
     var destWidth = width
@@ -140,6 +148,7 @@
     var pixelRatio
     var downsamplingRatio
     var tmp
+    var canvas
     /**
      * Scales up image dimensions
      */
@@ -224,12 +233,36 @@
     }
     if (useCanvas) {
       pixelRatio = options.pixelRatio
-      if (pixelRatio > 1) {
-        canvas.style.width = destWidth + 'px'
-        canvas.style.height = destHeight + 'px'
+      if (
+        pixelRatio > 1 &&
+        // Check if image has not yet device pixel ratio applied:
+        parseInt(img.style.width, 10) !== width / pixelRatio
+      ) {
         destWidth *= pixelRatio
         destHeight *= pixelRatio
-        canvas.getContext('2d').scale(pixelRatio, pixelRatio)
+      }
+      // Check if workaround for Chromium orientation crop bug is required:
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=1074354
+      if (
+        loadImage.orientationCropBug &&
+        !img.getContext &&
+        (sourceX || sourceY || sourceWidth !== width || sourceHeight !== height)
+      ) {
+        // Write the complete source image to an intermediate canvas first:
+        tmp = img
+        // eslint-disable-next-line no-param-reassign
+        img = loadImage.createCanvas(width, height, true)
+        loadImage.drawImage(
+          tmp,
+          img,
+          0,
+          0,
+          width,
+          height,
+          width,
+          height,
+          options
+        )
       }
       downsamplingRatio = options.downsamplingRatio
       if (
@@ -239,17 +272,18 @@
         destHeight < sourceHeight
       ) {
         while (sourceWidth * downsamplingRatio > destWidth) {
-          canvas.width = sourceWidth * downsamplingRatio
-          canvas.height = sourceHeight * downsamplingRatio
-          loadImage.renderImageToCanvas(
-            canvas,
+          canvas = loadImage.createCanvas(
+            sourceWidth * downsamplingRatio,
+            sourceHeight * downsamplingRatio,
+            true
+          )
+          loadImage.drawImage(
             img,
+            canvas,
             sourceX,
             sourceY,
             sourceWidth,
             sourceHeight,
-            0,
-            0,
             canvas.width,
             canvas.height,
             options
@@ -259,40 +293,29 @@
           sourceWidth = canvas.width
           sourceHeight = canvas.height
           // eslint-disable-next-line no-param-reassign
-          img = document.createElement('canvas')
-          img.width = sourceWidth
-          img.height = sourceHeight
-          loadImage.renderImageToCanvas(
-            img,
-            canvas,
-            0,
-            0,
-            sourceWidth,
-            sourceHeight,
-            0,
-            0,
-            sourceWidth,
-            sourceHeight,
-            options
-          )
+          img = canvas
         }
       }
-      canvas.width = destWidth
-      canvas.height = destHeight
-      loadImage.transformCoordinates(canvas, options)
-      return loadImage.renderImageToCanvas(
-        canvas,
-        img,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
-        0,
-        0,
-        destWidth,
-        destHeight,
-        options
-      )
+      canvas = loadImage.createCanvas(destWidth, destHeight)
+      loadImage.transformCoordinates(canvas, options, data)
+      if (pixelRatio > 1) {
+        canvas.style.width = canvas.width / pixelRatio + 'px'
+        canvas.style.height = canvas.height / pixelRatio + 'px'
+      }
+      loadImage
+        .drawImage(
+          img,
+          canvas,
+          sourceX,
+          sourceY,
+          sourceWidth,
+          sourceHeight,
+          destWidth,
+          destHeight,
+          options
+        )
+        .setTransform(1, 0, 0, 1, 0, 0) // reset to the identity matrix
+      return canvas
     }
     img.width = destWidth
     img.height = destHeight
